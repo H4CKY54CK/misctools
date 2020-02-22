@@ -16,5 +16,6 @@ setup(name='misctools',
           ['spriteit = misctools.spriteit:main',
           'zipit = misctools.zipit:main',
           'tarit = misctools.zipit:main',
-          'wgetit = misctools.wgetit:main',]
-          },)
+          'wgetit = misctools.wgetit:main',
+          'unzipit = misctools.unzipit:main,']
+          })
