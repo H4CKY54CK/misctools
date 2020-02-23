@@ -17,5 +17,5 @@ setup(name='misctools',
           'zipit = misctools.zipit:main',
           'tarit = misctools.zipit:main',
           'wgetit = misctools.wgetit:main',
-          'unzipit = misctools.unzipit:main,']
+          'unzipit = misctools.unzipit:main',]
           })
