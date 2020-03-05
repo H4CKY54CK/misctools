@@ -12,7 +12,7 @@ def build_spritesheets(args=None):
     for folder in os.scandir(args.source):
         if os.path.isdir(folder.path):
             images = []
-            x = y = 0
+            x, y = 0, 0
             for item in os.scandir(folder.path):
                 exts = ['.png', '.jpg', '.jpeg']
                 if item.name.endswith(tuple(exts)):
@@ -42,6 +42,9 @@ def build_spritesheets(args=None):
 def build_stylesheet(args=None):
     """Generate stylesheet contents."""
 
+    m = '\n'
+    if args.minify:
+        m = ''
     stylesheet = os.path.join(args.output, 'stylesheet.css')
     with open(stylesheet, 'w') as cssf:
         if args.size:
@@ -51,14 +54,14 @@ def build_stylesheet(args=None):
             subreddit = reddit.subreddit(reddit.config.custom['subreddit'])
             key = reddit.config.custom['key']
             sub_style = subreddit.stylesheet().stylesheet
-            style = f"{sub_style.split(key)[0]}{key}\n-------------*/\n"
+            style = f"{sub_style.split(key)[0]}{key}{m}-------------*/{m}"
             cssf.write(style)
         for folder in os.scandir(args.source):
             path = os.path.join(args.source, folder.path)
             if os.path.isdir(path):
-                line = f'\n.flair[class*="{folder.name}-"] {{background-image: url(%%flairs-{folder.name}%%);}}\n\n'
+                line = f'{m}.flair[class*="{folder.name}-"] {{background-image: url(%%flairs-{folder.name}%%);}}{m}{m}'
                 cssf.write(line)
-                x = y = 0
+                x, y = 0, 0
                 images = 0
                 for item in os.listdir(path):
                     images += 1
@@ -74,12 +77,13 @@ def build_stylesheet(args=None):
                         item = item.name.split('_4.png')[0]
                     elif item.name.endswith('.png'):
                         item = item.name.split('.png')[0]
-                    part = f".flair-{folder.name}-{item} {{min-width: {width}px; background-position: {x}{'px' if x != 0 else ''} {y}{'px' if y != 0 else ''};}}\n"
+                    part = f".flair-{folder.name}-{item} {{min-width: {width}px; background-position: {x}{'px' if x != 0 else ''} {y}{'px' if y != 0 else ''};}}{m}"
                     cssf.write(part)
                     x -= height
                     if -x == height * rows[0]:
                         x += height * rows[0]
                         y -= width
+
     print(f"Stylesheet `{os.path.basename(stylesheet)}` generated. You can find it in `{os.path.basename(args.output)}`.")
 
 def build_flairs(args=None):
@@ -158,6 +162,9 @@ def main(argv=None):
     parser.add_argument('-ni', '--no-img',
                         dest='img_output', action='store_false', help='skip generating the images, \
                         only generate the CSS')
+    parser.add_argument('-m', '--minify',
+                        dest='minify', action='store_true',
+                        help='minify the stylesheet after generation')
     parser.add_argument('-u', '--update',
                         dest='update', action='store_true', help='automatically update subreddit \
                         user flairs. includes uploading spritesheets and updating stylesheet. \
