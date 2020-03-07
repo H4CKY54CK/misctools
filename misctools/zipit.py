@@ -5,13 +5,9 @@ import zipfile
 import argparse
 import platform
 import subprocess
-import progressbar
-
+from tqdm import tqdm
 
 def zipit(args=None):
-    start = "\033[38;5;46m"
-    end = "\033[39m\033[49m"
-    widgets = [' [', progressbar.Percentage(), '] ', start, progressbar.Bar(), end, ' (', progressbar.AdaptiveETA(), ') ',]
 
     if args.zip or platform.system().casefold() == 'windows' and not args.tar and not args.zip:
         if not args.output:
@@ -23,7 +19,7 @@ def zipit(args=None):
             for dirpath, dirnames, filenames in os.walk(args.source):
                 for filename in filenames:
                     items.append(os.path.join(dirpath, filename))
-            for item in progressbar.progressbar(items, widgets=widgets):
+            for item in tqdm(items, desc='Progress'):
                 zip_file.write(item)
             print(f"Archive `{output_zip}` successfully created.")
             no_errors = True
@@ -54,7 +50,7 @@ def zipit(args=None):
                 for file in files:
                     tars.append(os.path.join(root, file))
             with tarfile.open(output_tar, 'w:gz') as tar_handle:
-                for item in progressbar.progressbar(tars, widgets=widgets):
+                for item in tqdm(tars, desc='Progress'):
                     tar_handle.add(item)
             print(f"Archive `{output_tar}` successfully created.")
             no_errors = True

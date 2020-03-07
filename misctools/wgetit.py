@@ -1,7 +1,6 @@
 import os
 import sys
 import argparse
-import progressbar as pb
 import urllib.request as req
 
 def wdownload(args=None):

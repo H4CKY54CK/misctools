@@ -1,58 +1,33 @@
 import time
 from functools import wraps
 
-microseconds = u"\u00B5" + 's'
 
-
-def timeit(arg=None, repeat=None):
+def timeit(arg=None, repeat=1):
     def decorator(func):
+        @wraps(func)
         def wrapper(*args, **kwargs):
-            if repeat is None:
-                ts = time.perf_counter_ns()
-                result = func(*args, **kwargs)
-                te = time.perf_counter_ns() - ts
-                if te > 1000000000:
-                    tte = te/1000000000
-                    unit = 's'
-                elif te > 1000000:
-                    tte = te/1000000
-                    unit = 'ms'
-                elif te > 1000:
-                    tte = te/1000
-                    unit = '\u00b5s'
-                else:
-                    tte = te
-                    unit = 'ns'
-                print(f"'{func.__name__}' elapsed: {tte:.2f} {unit}")
-            else:
-                times = []
-                for _ in range(repeat):
+            times = []
+            for _ in range(repeat):
+                ts = time.time()
+                if repeat > 1:
                     ts = time.perf_counter_ns()
-                    result = func(*args, **kwargs)
-                    te = time.perf_counter_ns() - ts
-                    times.append(te)
-                avg = (sum(times)/len(times))
-                if avg > 1000000000:
-                    tavg = avg/1000000000
-                    best = min(times)/1000000000
-                    worst = max(times)/1000000000
-                    unit = 's'
-                elif avg > 1000000:
-                    tavg = avg/1000000
-                    best = min(times)/1000000
-                    worst = max(times)/1000000
-                    unit = 'ms'
-                elif avg > 1000:
-                    tavg = avg/1000
-                    best = min(times)/1000
-                    worst = max(times)/1000
-                    unit = '\u00b5'
+                result = func(*args, **kwargs)
+                if repeat > 1:
+                    times.append(time.perf_counter_ns() - ts)
                 else:
-                    tavg = avg
-                    best = min(times)
-                    worst = max(times)
-                    unit = 'ns'
-                print(f"'{func.__name__}' results:\n---\nAverage of {repeat}: {tavg:.2f} {unit}\nBest of {repeat}: {best:.2f} {unit}\nWorst of {repeat}: {worst:.2f} {unit}\n")
+                    times.append(time.time() - ts)
+            tavg = (sum(times)/len(times))
+            single, multi = ['s', 's', 's', 'ms', 'ms', 'ms', '\u00b5s', '\u00b5s', '\u00b5s', 'ns', 'ns', 'ns'], ['ns', 'ns', 'ns', '\u00b5s', '\u00b5s', '\u00b5s', 'ms', 'ms', 'ms', 's', 's', 's']
+            best, worst = min(times), max(times)
+            while tavg > 10:
+                tavg, best, worst = (i / 10 for i in (tavg, best, worst))
+                if len(single) + len(multi) > 2:
+                    single.pop(0)
+                    multi.pop(0)
+            msg = f"'{func.__name__}' elapsed: {tavg:.2f} {single[0]}"
+            if repeat > 1:
+                msg = f"'{func.__name__}' results:\n---\nAverage (of {repeat}): {tavg:.2f} {multi[0]}\nBest (of {repeat}): {best:.2f} {multi[0]}\nWorst (of {repeat}): {worst:.2f} {multi[0]}\n"
+            print(msg)
             return result
         return wrapper
     if callable(arg):

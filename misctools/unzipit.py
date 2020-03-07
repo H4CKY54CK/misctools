@@ -2,23 +2,28 @@ import os
 import sys
 import zipfile
 import argparse
-import progressbar
-
+import tarfile
+from tqdm import tqdm
 
 def unzipit(args=None):
 
+    if zipfile.is_zipfile(args.source):
+        with zipfile.ZipFile(args.source) as z:
+            memb = list(z.namelist())
+            path = os.path.splitext(args.source)[0]
+            if not os.path.exists(path):
+                os.mkdir(path)
+            for item in tqdm(memb, desc="Progress"):
+                z.extract(item)
 
-    start = "\033[38;5;46m"
-    end = "\033[39m\033[49m"
-    bar = progressbar.progressbar
-    widgets = ['[ ', progressbar.Percentage(), ' ]', start, progressbar.Bar(), end, '[ ', progressbar.AdaptiveETA(), ' ]',]
-    with zipfile.ZipFile(args.source) as z:
-        for item in bar(z.namelist(), widgets=widgets):
-            dirname = os.path.splitext(args.source)[0]
-            if not os.path.exists(dirname):
-                os.mkdir(dirname)
-            path = os.path.join(os.getcwd(), dirname)
-            z.extract(item, path=path)
+    elif tarfile.is_tarfile(args.source):
+        with tarfile.open(args.source) as t:
+            memb = list(t.getmembers())
+            path = args.source.split('.tar.gz')[0]
+            if not os.path.exists(path):
+                os.mkdir(path)
+            for item in tqdm(memb, desc="Progress"):
+                t.extract(item)
     print("Enjoy!")
     sys.exit()
 
