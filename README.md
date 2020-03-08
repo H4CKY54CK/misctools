@@ -6,7 +6,8 @@ Most Indefinitely Something Cool... tools.
 `pip install https://github.com/H4CKY54CK/misctools/archive/master.zip`  
 `pip install https://github.com/H4CKY54CK/misctools/archive/master.tar.gz`
 
- This package provides several commands via the command line.  
+ This package provides several commands via the command line.
+ 
    - spriteit  
    - zipit/tarit  
    - unzipit/untarit  
@@ -16,10 +17,12 @@ Most Indefinitely Something Cool... tools.
 
   I needed a specific tool for a subreddit I mod, so it's highly tailored to my specific needs. Here's how it works.
   
-  Call it from the command line like so:  
+  Call it from the command line like so:
+  
   `spriteit <source> [output] [options]`
   
-  For example, in a directory that contains the target folder, which contains a number of subfolders, each containing a number of same-size images, you could use it like so (let's assume the target/source directory is called "images"):  
+  For example, in a directory that contains the target folder, which contains a number of subfolders, each containing a number of same-size images, you could use it like so (let's assume the target/source directory is called "images"):
+
   `spriteit images` To get a straight-up concatenation of the images per folder.  
   `spriteit images spritesheets` To send the output to a folder "spritesheets". (default is "sprites")  
   `spriteit images -xy 40 40 --output=spritesheets` Two things happening here. `-xy` expects two integers to follow it. This is the desired dimensions of the INDIVIDUAL images inside the spritesheet. For example, a 10x10 sheet would end up being 400x400 px. Also, source and output are also flaggable, in that you can `--source=<input_dir>` and `--output=<output_dir>` instead of providing them positionally.  
