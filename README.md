@@ -43,7 +43,7 @@ Most Indefinitely Something Cool... tools.
   
 ## zipit/tarit
 
-  `zipit source` Guesses your native file format based on the output of sys. `.zip` for Windows, `.tar.gz` for linux.  `
+  `zipit source` Guesses your native file format based on the output of sys. `.zip` for Windows, `.tar.gz` for linux.  
   `tarit source` Does the same as above. Mostly a preferential thing.  
   `zipit source [-t | -z]` -t for a `.tar.gz` archive, -z for a `.zip` archive  
 
