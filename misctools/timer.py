@@ -1,36 +1,33 @@
 import time
 from functools import wraps
 
+def ftime(n):
+    units = ['ns', '\u00B5s', 'ms', 's']
+    reso = [.1*10**((i*3)+1) for i in range(10)]
+    q = len([i for i in reso if n > i])
+    readable = f"{((n*1000)/reso[q]):.2f} {units[q-1]}"
+    return readable
 
-def timeit(arg=None, repeat=1):
+def timeit(arg=None, repeat:int=1):
     def decorator(func):
         @wraps(func)
-        def wrapper(*args, **kwargs):
-            times = []
-            for _ in range(repeat):
-                ts = time.time()
-                if repeat > 1:
-                    ts = time.perf_counter_ns()
-                result = func(*args, **kwargs)
-                if repeat > 1:
-                    times.append(time.perf_counter_ns() - ts)
-                else:
-                    times.append(time.time() - ts)
-            tavg = (sum(times)/len(times))
-            single, multi = ['s', 's', 's', 'ms', 'ms', 'ms', '\u00b5s', '\u00b5s', '\u00b5s', 'ns', 'ns', 'ns'], ['ns', 'ns', 'ns', '\u00b5s', '\u00b5s', '\u00b5s', 'ms', 'ms', 'ms', 's', 's', 's']
-            best, worst = min(times), max(times)
-            while tavg > 10:
-                tavg, best, worst = (i / 10 for i in (tavg, best, worst))
-                if len(single) + len(multi) > 2:
-                    single.pop(0)
-                    multi.pop(0)
-            msg = f"'{func.__name__}' elapsed: {tavg:.2f} {single[0]}"
+        def wrapper(*args, **kw):
+            ts = time.perf_counter_ns()
+            result = func(*args, **kw)
+            te = time.perf_counter_ns() - ts
+            times = [te]
             if repeat > 1:
-                msg = f"'{func.__name__}' results:\n---\nAverage (of {repeat}): {tavg:.2f} {multi[0]}\nBest (of {repeat}): {best:.2f} {multi[0]}\nWorst (of {repeat}): {worst:.2f} {multi[0]}\n"
-            print(msg)
+                for _ in range(repeat):
+                    ts = time.perf_counter_ns()
+                    result = func(*args, **kw)
+                    te = time.perf_counter_ns() - ts
+                    times.append(te)
+                avg = sum(times)/len(times)
+                print(f"Average: {ftime(avg)}")
+                return result
+            print(f"{func.__name__} elapsed: {ftime(te)}")
             return result
         return wrapper
     if callable(arg):
         return decorator(arg)
-    else:
-        return decorator
+    return decorator
