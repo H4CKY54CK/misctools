@@ -5,7 +5,7 @@ def readme():
         return f.read()
 
 setup(name='misctools',
-      version='1.5',
+      version='1.6',
       description="'Miscellaneously Incredible Suite of Cool' TOOLS",
       long_description=readme(),
       author='Hackysack',

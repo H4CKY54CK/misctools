@@ -9,8 +9,8 @@ Most Indefinitely Something Cool... tools.
  This package provides several commands via the command line.
  
    - spriteit  
-   - zipit/tarit  
-   - unzipit/untarit  
+   - archit  
+   - unzipit (soon to be unarchit)  
    - wgetit  
 
 ## spriteit
@@ -41,13 +41,12 @@ Most Indefinitely Something Cool... tools.
   `-ni / --no-img` Skip the spritesheets, just give me the stylesheet!  
   `-m / --minify` Minify the part of the stylesheet that we worked on, but leave the rest? Maybe I'll change it
   
-## zipit/tarit
+## archit
 
-  `zipit source` Guesses your native file format based on the output of sys. `.zip` for Windows, `.tar.gz` for linux.  
-  `tarit source` Does the same as above. Mostly a preferential thing.  
-  `zipit source [-t | -z]` -t for a `.tar.gz` archive, -z for a `.zip` archive  
+  `archit source` Guesses your native file format based on the output of sys. `.zip` for Windows, `.tar.gz` for linux.  
+  `archit source [-t | -z]` -t for a `.tar.gz` archive, -z for a `.zip` archive  
 
-## unzipit/untarit
+## unzipit (soon to be `unarchit`)
 
   `unzipit source [options]` - Source must end in an acceptable extension, such as `.zip` or `.tar.gz`  
 
