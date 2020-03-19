@@ -15,9 +15,9 @@ setup(name='misctools',
       python_requires='>=3.6',
       entry_points={'console_scripts':
           ['spriteit = misctools.spriteit:main',
-          'zipit = misctools.zipit:main',
-          'tarit = misctools.zipit:main',
+          'archit = misctools.archit:main',
           'wgetit = misctools.wgetit:main',
           'unzipit = misctools.unzipit:main',
+          'ipy = misctools.utilities:main',
           'untarit = misctools.unzipit:main',]
           })
