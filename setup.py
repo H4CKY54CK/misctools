@@ -17,7 +17,8 @@ setup(name='misctools',
           ['spriteit = misctools.spriteit:main',
           'archit = misctools.archit:main',
           'wgetit = misctools.wgetit:main',
-          'unzipit = misctools.unzipit:main',
+          'unarchit = misctools.unarchit:main',
           'ipy = misctools.utilities:main',
+          'gifit = misctools.gifit:main',
           'untarit = misctools.unzipit:main',]
           })

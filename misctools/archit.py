@@ -1,9 +1,15 @@
+import os
 import sys
-import traceback
+import time
 import shutil
 import argparse
+import traceback
 import subprocess
 def archit(args):
+    blue = '\033[38;2;30;144;255m'
+    underline = '\033[4m'
+    un1 = '\033[24m'
+    un2 = '\033[38;2;123;104;238m'
     args.output = args.output or args.source
     errors = False
     print(f"\n\033[38;2;30;144;255m    \033[4mMisctools v1.5dev\033[24m\033[38;2;123;104;238m\n")
@@ -15,13 +21,17 @@ def archit(args):
                 print(f"    Archive `{args.output}.{item}` created...\n")
             except Exception as e:
                 with open('archiving_errors.log', 'a') as f:
-                    f.write(traceback.format_exc())
+                    f.write(traceback.format_exc()+'\n')
                 errors = True
     finally:
         if args.install:
             print(f"    \033[38;2;255;165;0mPreparing to install `{args.output}.{args.sys}` via pip...\033[0m\n")
+            time.sleep(2)
             subprocess.check_call([sys.executable, '-m', 'pip', 'install', f"{args.output}.{args.sys}"])
-            print(f"\n    \033[38;2;255;165;0mFinished installing `{args.output}.{args.sys}`...\033[0m\n")
+            print(f"    \033[38;2;255;165;0mFinished installing `{args.output}.{args.sys}`...\033[0m\n")
+            time.sleep(2)
+            print(f"    \033[38;2;255;165;0mCleaning up...\033[0m\n")
+            os.remove(f'{args.output}.{args.sys}')
         if errors:
             print("    \033[38;2;50;252;50mFinished with errors. See `archiving_errors.log` for a more detailed report.\033[0m")
         else:
