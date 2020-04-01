@@ -5,6 +5,7 @@ import shutil
 import argparse
 import traceback
 import subprocess
+from . import __version__
 def archit(args):
     blue = '\033[38;2;30;144;255m'
     underline = '\033[4m'
@@ -12,7 +13,7 @@ def archit(args):
     un2 = '\033[38;2;123;104;238m'
     args.output = args.output or args.source
     errors = False
-    print(f"\n\033[38;2;30;144;255m    \033[4mMisctools v1.5dev\033[24m\033[38;2;123;104;238m\n")
+    print(f"\n\033[38;2;30;144;255m    \033[4mMisctools v{__version__}\033[24m\033[38;2;123;104;238m\n")
     try:
         for item in args.format:
             try:
