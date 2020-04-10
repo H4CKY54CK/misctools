@@ -9,9 +9,28 @@ Most Indefinitely Something Cool... tools.
  This package provides several commands via the command line.
  
    - spriteit  
-   - archit  
-   - unzipit (soon to be unarchit)  
+   - sliceit  
+   - archit
+   - unarchit    
    - wgetit  
+
+  And also a timing decorator.
+  
+  `from misctools.timer import timeit`
+  
+  And then you can decorate your functions like so:
+  
+  `@timeit
+  def main():
+      # stuff`
+      
+  You can get an average over repeated runs:
+  
+  `@timeit(repeat=5)
+  def main():
+      # stuff`
+      
+  Just be careful that you don't repeat 50 times, and your code takes 50 seconds each run. That would take forever. Be smart.
 
 ## spriteit
 
@@ -41,12 +60,20 @@ Most Indefinitely Something Cool... tools.
   `-ni / --no-img` Skip the spritesheets, just give me the stylesheet!  
   `-m / --minify` Minify the part of the stylesheet that we worked on, but leave the rest? Maybe I'll change it
   
+## sliceit
+
+  This is a new addition to the family. It takes a spritesheet and slices it up into the images that make it up. Must be same size images that make up the spritesheet. It's not intelligent, so you'll need to be able to provide the height/width of the smaller images (one height, one width, since they should all be the same size), or the amount of rows/columns in the spritesheet.
+  
+  `sliceit somespritesheet.png 60 60` Slices the images up into 60x60 chunks.  
+  `sliceit somespritesheet.png -x 60 -y 60` Same deal. `--width`/`--height` could be used in place of `-x`/`-y`.  
+  `sliceit somespritesheet.png -r 13 -c 1` Slices up the image based on 13 rows and 1 column(s). `--rows`/`--columns` could be used in place of `-r`/`-c`.  
+
 ## archit
 
   `archit source` Guesses your native file format based on the output of sys. `.zip` for Windows, `.tar.gz` for linux.  
-  `archit source [-t | -z]` -t for a `.tar.gz` archive, -z for a `.zip` archive  
+  `archit source -f <formats>` Available formats are zip/tar/gztar/bztar/xztar. Multiple formats allowed, separated by a single space each.  
 
-## unzipit (soon to be `unarchit`)
+## unarchit
 
   `unzipit source [options]` - Source must end in an acceptable extension, such as `.zip` or `.tar.gz`  
 
