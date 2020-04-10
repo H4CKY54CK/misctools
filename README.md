@@ -1,6 +1,10 @@
 # misctools
 Most Indefinitely Something Cool... tools.
 
+# News
+
+Updated README as of April 10th, 2020
+
 # Installation
 
 `pip install https://github.com/H4CKY54CK/misctools/archive/master.zip`  
