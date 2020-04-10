@@ -1,28 +1,16 @@
 import os
 import sys
 import argparse
-import urllib.request as req
-
+from urllib.request import urlopen
 def wdownload(args=None):
     url = args.url
-    name = url.split('.com')[1]
-    rpath = req.url2pathname(name)
-    path = os.path.basename(rpath)
-    filename = os.path.join(os.getcwd(), path)
+    name = os.path.basename(url)
     try:
-        x = 0
-        while os.path.exists(filename):
-            x += 1
-            fname, ext = filename.split('.')
-            fname = fname.split(' ')[0]
-            filename = f"{fname} ({x}).{ext}"
-        with open(filename, 'wb') as f:
-            f.write(req.urlopen(url).read())
-        return f"{url} -> {filename}"
-    except Exception:
-        print(sys.exc_info())
-        return f"Could not parse URL"
-
+        with open(name, 'wb') as f:
+            f.write(urlopen(url).read())
+            return f"{url} -> {name}"
+    except Exception as e:
+        return str(e)
 def main(argv=None):
     argv = (argv or sys.argv)[1:]
     parser = argparse.ArgumentParser()
@@ -30,6 +18,5 @@ def main(argv=None):
     parser.set_defaults(func=wdownload)
     args = parser.parse_args(argv)
     print(args.func(args))
-
 if __name__ == '__main__':
     sys.exit(main())
