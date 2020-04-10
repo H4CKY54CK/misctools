@@ -6,44 +6,44 @@ from PIL import Image
 
 def sliceit(args):
 
-    with Image.open(source) as img:
+    with Image.open(args.source) as img:
         height = img.height
         width = img.width
-    rows = math.ceil(height / h)
-    cols = math.ceil(width / w)
+    rows = math.ceil(height / args.height)
+    cols = math.ceil(width / args.width)
     total = rows * cols
     print(total)
 
     zf = len(str(total))
     x = 0
     y = 0
-    xx = w
-    yy = h
+    xx = args.width
+    yy = args.height
     z = 0
-    img = Image.open(source)
+    img = Image.open(args.source)
     while True:
-        base, ext = os.path.splitext(source)
+        base, ext = os.path.splitext(args.source)
         output = f"{base}-{str(z).zfill(zf)}{ext}"
         if xx > width:
             x = 0
-            xx = w
-            y += h
-            yy += h
+            xx = args.width
+            y += args.height
+            yy += args.height
         if yy > height:
             print("All done!")
             sys.exit()
         box = (x,y,xx,yy)
         img.crop(box).save(output)
-        x += w
-        xx += w
+        x += args.width
+        xx += args.width
         z += 1
 
 def main(argv=None):
     argv = (argv or sys.argv)[1:]
     parser = argparse.ArgumentParser()
     parser.add_argument('source', type=str)
-    parser.add_argument('height', type=str)
-    parser.add_argument('width', type=str)
+    parser.add_argument('height', type=int)
+    parser.add_argument('width', type=int)
     parser.set_defaults(func=sliceit)
     args = parser.parse_args(argv)
     args.func(args)
