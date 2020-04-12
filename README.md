@@ -63,7 +63,7 @@ The timing decorator can be used in several ways, illustrated below.
     # main2 elapsed: 500.38 ms
     # main3 average elapsed: 616.67 ns | best (of 5): 300.00 ns | worst (of 5): 1.90 µs
 
-The timing decorator also automatically converts the time returned into a sensible unit, to optimize viewing pleasure.
+The timing decorator also automatically converts the time returned into a sensible unit, for optimal viewing pleasure.
 
 Just be careful that you don't repeat 50 times, and your code takes 50 seconds each run. That would take forever. Be smart.
 
@@ -116,6 +116,8 @@ This is a new addition to the family. It takes a spritesheet and slices it up in
 `unzipit source [options]` - Source must end in an acceptable extension, such as `.zip` or `.tar.gz`  
 
 ## wgetit
+
+A simple, yet effective, Python/Windows implementation of the popular Linux command, `wget`, called `wgetit` (get it? _laughs nervously... and then maniacally..._).
 
 `wgetit url` Works the same as wget. Without fancy options, though.
 
