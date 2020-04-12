@@ -23,7 +23,7 @@ def timeit(arg=None, repeat:int=1):
                     te = time.perf_counter_ns() - ts
                     times.append(te)
                 avg = sum(times)/len(times)
-                print(f"Average: {ftime(avg)}")
+                print(f"{func.__name__} average elapsed: {ftime(avg)} | best (of {repeat}): {ftime(min(times))} | worst (of {repeat}): {ftime(max(times))}")
                 return result
             print(f"{func.__name__} elapsed: {ftime(te)}")
             return result

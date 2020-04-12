@@ -32,7 +32,8 @@ def archit(args, options=None):
             print(f"    \033[38;2;255;165;0mPreparing to install `{args.output}.{args.sys}` via pip...\033[0m\n")
             time.sleep(2)
             ret = subprocess.run(f"{sys.executable} -m pip install {' '.join(options)} {args.output}.{args.sys}")
-            n = '\n' if not ret else ''
+            # n = '\n' if not ret else ''
+            n = '\n'
             print(f"{n}    \033[38;2;255;165;0mFinished installing `{args.output}.{args.sys}`...\033[0m\n")
             time.sleep(2)
             print(f"    \033[38;2;255;165;0mCleaning up...\033[0m\n")

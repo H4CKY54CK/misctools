@@ -17,7 +17,7 @@ setup(name=PACKAGE_NAME,
       author='Hackysack',
       author_email='tk13xr37@gmail.com',
       packages=find_packages(exclude=[]),
-      install_requires=['tqdm', 'pillow'],
+      install_requires=['pillow'],
       python_requires='>=3.6',
       entry_points={'console_scripts':
           ['spriteit = misctools.spriteit:main',

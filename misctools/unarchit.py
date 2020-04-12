@@ -2,7 +2,6 @@ import os
 import sys
 import argparse
 import shutil
-from tqdm import tqdm
 
 def unzipit(args=None):
 
