@@ -49,7 +49,10 @@
     # main2 elapsed: 500.38 ms
     # main3 average elapsed: 616.67 ns | best (of 5): 300.00 ns | worst (of 5): 1.90 µs
     ```
-  Just be careful that you don't repeat 50 times, and your code takes 50 seconds each run. That would take forever. Be smart.
+
+    Just be careful that you don't repeat 50 times, and your code takes 50 seconds each run. That would take forever. Be smart.
+
+    The timing decorator also automatically converts the time returned into a sensible unit, to optimize viewing pleasure.
 
 ## spriteit
 
@@ -103,7 +106,8 @@
 
 ## gifit
 
-    `gifit foldername somefile.gif` Takes the contents of the directory `foldername`, and stitches them together (sorted by filename, so `file00.png`, `file01.png`, `file02.png`, etc), saving the final result as a GIF, `somefile.gif`.
+    `gifit foldername somefile.gif` Takes the contents of the directory `foldername`, and stitches them together (sorted\
+    by filename, so `file00.png`, `file01.png`, `file02.png`, etc), saving the final result as a GIF, `somefile.gif`.
 
 ## Other
 
