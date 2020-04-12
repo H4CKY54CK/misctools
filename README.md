@@ -21,7 +21,7 @@ Alternatively, you can download the repo as a `.zip` file, stand in the director
 
 ## What do I get?
 
-This package provides several commands via the command line (listed below), as well as a timing decorator for in-script use.
+This package provides several commands via the command line (listed below).
 
 - spriteit  
 - sliceit  
@@ -29,6 +29,8 @@ This package provides several commands via the command line (listed below), as w
 - unarchit  
 - wgetit  
 - gifit
+
+You also get a timing decorator, to time your functions, with the option to repeat the function multiple times, to acquire an average, best, and worst elapsed time.
 
 ## @timeit
 
@@ -61,9 +63,11 @@ The timing decorator can be used in several ways, illustrated below.
     # main2 elapsed: 500.38 ms
     # main3 average elapsed: 616.67 ns | best (of 5): 300.00 ns | worst (of 5): 1.90 µs
 
+The timing decorator also automatically converts the time returned into a sensible unit, to optimize viewing pleasure.
+
 Just be careful that you don't repeat 50 times, and your code takes 50 seconds each run. That would take forever. Be smart.
 
-The timing decorator also automatically converts the time returned into a sensible unit, to optimize viewing pleasure.
+Note: I'm considering moving this into a file that would house various other utility functions, in an attempt to stay organized.
 
 ## spriteit
 
