@@ -13,8 +13,12 @@ def gifit(args=None, directory=None):
     else:
         output = args.output
 
-    images = [Image.open(os.path.join(os.path.abspath(source), item)) for item in os.listdir(source)]
-    images[0].save(output, save_all=True, append_images=images[1:], loop=0)
+    frames = []
+    for item in os.scandir(source):
+        img = Image.open(item.path)
+        frames.append(img.copy())
+
+    frames[0].save(output, save_all=True, append_images=frames[1:], loop=0)
     print(f"Gif {output} created. Enjoy!")
     if sys.platform == 'win32':
         os.system(output)
