@@ -1,10 +1,31 @@
 CHANGELOG
 ==========
 
+1.8.4 (4-14-2020)
+-----------------
+
+**Patches**
+
+* Implemented a workaround, so that we can have the latest Pillow again, as well as dropped the version requirement for Pillow.
+
+1.8.3post1 (4-13-2020)
+----------------------
+
+**Corrections**
+
+* Clarified/changed some wording in the README.
+
+1.8.3 (4-13-2020)
+-----------------
+
+**Changes**
+
+* Changed required version of Pillow to 7.0.0 due to 7.1.1 having a bug the prevented `gifit` from working.
+
 1.8.2 (4-12-2020)
 -----------------
 
-**Added**
+**New**
 
 * This changelog. Lol. I added it after I made the most recent changes, but I'll start keeping better track. Anything below this is a guess.
 * Finally corrected the formatting of the README as well as updated it so it contains the most recent info as of now.
