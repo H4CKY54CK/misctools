@@ -2,12 +2,6 @@
 
 Most Indefinitely Something Cool... tools.
 
-# News
-
-Updated README as of April 11th, 2020. Corrected formatting of the output from the installation option of `archit`, improved the timing decorator by adding additional output, and CORRECTLY REFORMATTED THIS README (woo! finally).
-
-A changelog sounds like a pretty good idea, so expect that in the next update.
-
 # Installation
 
 This package is not currently available through PyPi. However, you can still install this package with your preference of one of the two commands below.
