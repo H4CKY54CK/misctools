@@ -20,24 +20,22 @@ def archit(args, options=None):
     try:
         for item in args.format:
             try:
-                print(f"    Creating archive {args.output}.{item}...")
+                ext = f"tar.{item.split('tar')[0]}" if item != 'tar' and 'tar' in item else item
+                print(f"    Creating archive {args.output}.{ext}...")
                 shutil.make_archive(args.output, item, args.source)
-                print(f"    Archive `{args.output}.{item}` created...\n")
+                print(f"    Archive `{args.output}.{ext}` created...\n")
             except Exception as e:
                 with open('archiving_errors.log', 'a') as f:
                     f.write(traceback.format_exc()+'\n')
                 errors = True
     finally:
         if args.install:
-            print(f"    \033[38;2;255;165;0mPreparing to install `{args.output}.{args.sys}` via pip...\033[0m\n")
-            time.sleep(2)
-            ret = subprocess.run(f"{sys.executable} -m pip install {' '.join(options)} {args.output}.{args.sys}")
-            # n = '\n' if not ret else ''
-            n = '\n'
-            print(f"{n}    \033[38;2;255;165;0mFinished installing `{args.output}.{args.sys}`...\033[0m\n")
-            time.sleep(2)
+            ext = f"tar.{args.sys.split('tar')[0]}" if args.sys != 'tar' and 'tar' in args.sys else args.sys
+            print(f"    \033[38;2;255;165;0mPreparing to install `{args.output}.{ext}` via pip...\033[0m\n")
+            os.system(f"{sys.executable} -m pip install {' '.join(options)} {args.output}.{ext}")
+            print(f"\n    \033[38;2;255;165;0mFinished installing `{args.output}.{ext}`...\033[0m\n")
             print(f"    \033[38;2;255;165;0mCleaning up...\033[0m\n")
-            os.remove(f'{args.output}.{args.sys}')
+            os.remove(f'{args.output}.{ext}')
         if errors:
             print("    \033[38;2;50;252;50mFinished with errors. See `archiving_errors.log` for a more detailed report.\033[0m")
         else:
@@ -47,7 +45,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('source', type=str, help='package name in current directory you wish to compress')
     parser.add_argument('output', type=str, nargs='?', help='optionally specify an output name for the compressed file')
-    parser.add_argument('-f', '--format', dest='format', type=str, nargs='+', help="archive compression format (one or more of: 'zip', 'tar' (uncompressed), 'gztar', 'bztar', or 'xztar')")
+    parser.add_argument('-f', '--format', dest='format', type=str, choices=('zip', 'tar', 'gztar', 'bztar', 'xztar'), nargs='+', help="archive compression format (any combination of: 'zip', 'tar' (uncompressed), 'gztar', 'bztar', or 'xztar')")
     # parser.add_argument('-z', '--zip', dest='zip', action='store_true', help='choose this archive format')
     # parser.add_argument('-t', '--tar', dest='tar', action='store_true', help='choose this archive format')
     # parser.add_argument('-g', '--gztar', dest='gztar', action='store_true', help='choose this archive format')
