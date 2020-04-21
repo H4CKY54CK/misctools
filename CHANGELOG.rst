@@ -1,6 +1,26 @@
 CHANGELOG
 ==========
 
+1.9.0 (4-21-2020)
+-----------------
+
+**Added**
+
+* New command line command, `substats`. Examine the last 1k comments made to a subreddit, group them according to the time of day they were made, and report back a total count per hour of the day. Good for getting a rough estimate of when the active time of a subreddit is.
+
+
+**Changes**
+
+* Corrected the formatting for `archit`.
+
+
+1.8.5 ???
+-----------------
+
+**???**
+
+* I forgot to log the changes.
+
 1.8.4 (4-14-2020)
 -----------------
 
