@@ -26,6 +26,9 @@ setup(name=PACKAGE_NAME,
           'unarchit = misctools.unarchit:main',
           'ipy = misctools.utilities:main',
           'gifit = misctools.gifit:main',
-          'sliceit = misctools.sliceit:main',]
+          'sliceit = misctools.sliceit:main',
+          'ecython = misctools.utilities:ecython',
+          'wcit = misctools.utilities:wcit_parse.start',
+          'substats = misctools.substats:main',]
           })
 
