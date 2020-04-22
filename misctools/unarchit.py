@@ -1,3 +1,4 @@
+from pathlib import Path
 import os
 import sys
 import argparse
@@ -5,13 +6,22 @@ import shutil
 
 def unzipit(args=None):
 
-    for item in os.scandir(os.getcwd()):
-        name, ext = os.path.splitext(item.name)
-        if args.source.lower() == name.lower() or args.source.lower() == item.name.lower():
-            shutil.unpack_archive(item.path, os.path.splitext(item.path)[0])
-            print("Finished extracting.")
-            if args.delete:
-                os.remove(item)
+    source = os.path.abspath(args.source)
+    source = Path(args.source).absolute()
+    output = str(source).split(''.join(source.suffixes))[0] if not args.output else args.output
+    shutil.unpack_archive(source, output)
+    print('Finished extracting.')
+    if args.delete:
+        os.remove(source)
+
+
+    # for item in os.scandir(os.getcwd()):
+    #     name, ext = os.path.splitext(item.name)
+    #     if args.source.lower() == name.lower() or args.source.lower() == item.name.lower():
+    #         shutil.unpack_archive(item.path, os.path.splitext(item.path)[0])
+    #         print("Finished extracting.")
+    #         if args.delete:
+    #             os.remove(item)
 
 def main(argv=None):
     argv = (argv or sys.argv)[1:]

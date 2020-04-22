@@ -24,11 +24,11 @@ setup(name=PACKAGE_NAME,
           'archit = misctools.archit:main',
           'wgetit = misctools.wgetit:main',
           'unarchit = misctools.unarchit:main',
-          'ipy = misctools.utilities:main',
+          # 'ipy = misctools.utilities:main',
           'gifit = misctools.gifit:main',
           'sliceit = misctools.sliceit:main',
           'ecython = misctools.utilities:ecython',
-          'wcit = misctools.utilities:wcit_parse.start',
+          'wcit = misctools.utilities:wcit.start',
           'substats = misctools.substats:main',]
           })
 

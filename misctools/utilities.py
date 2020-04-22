@@ -36,7 +36,7 @@ def ecython(args=None):
 from misctools.timer import timeit
 
 @begin.start
-def wcit_parse(*filenames):
+def wcit(*filenames):
     # files = [f for g in filenames for f in glob(g)]
     files = [f for g in filenames for f in glob(g)]
     chars = 0
@@ -45,10 +45,12 @@ def wcit_parse(*filenames):
     sys.stdout.write(f"\n{'lines':<10}{'words':<10}{'chars':<10}\n")
     for file in files:
         with open(file) as f:
-            data = f.read()
+            d = f.read()
+        l = len(d.split('\n'))-1
+        w = len(d.split())
         c = os.path.getsize(file)
-        w = len(re.findall(r'\S+', data))
-        l = len(re.findall(r'\n', data))
+        # w = len(re.findall(r'\S+', data))
+        # l = len(re.findall(r'\n', data))
         chars += c
         words += w
         lines += l
