@@ -54,9 +54,9 @@ def wcit(*filenames):
         chars += c
         words += w
         lines += l
-        sys.stdout.write(f"{l:<10}{w:<10}{c:<10}{file:>10}")
+        sys.stdout.write(f"{l:<10}{w:<10}{c:<10}{file:<30}\n")
     if c != chars:
-        sys.stdout.write(f"{lines:<10}{words:<10}{chars:<10}{'total':>10}")
+        sys.stdout.write(f"{lines:<10}{words:<10}{chars:<10}{'total':<10}\n")
 
 
 # def wcit(args):
