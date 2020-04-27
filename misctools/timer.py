@@ -38,19 +38,3 @@ def timeit(arg=None, repeat:int=1, garbage=False):
     elif repeat == 1 and type(arg) == int:
         repeat = arg or 1
     return decorator
-
-@timeit
-def one():
-    return
-
-@timeit(repeat=50000)
-def two():
-    return
-
-@timeit(50000)
-def three():
-    return
-
-one()
-two()
-three()
