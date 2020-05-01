@@ -28,12 +28,15 @@ from glob import glob
 #     args.func(args)
 
 # Util commands
-def ecython(args=None):
-    args = sys.argv[1:]
-    parts = ' '.join(args) or '*.pyx'
-    command = 'easycython'
-    os.system(f"{command} {parts}")
-from misctools.timer import timeit
+@begin.start
+def ecython(*filenames):
+    files = [f for g in filenames for f in glob(g)]
+    extensions = []
+    for f in files:
+        basename, ext = splitext(f)
+        extensions.append((basename, f))
+    sys.argv = [sys.argv[0], 'build_ext', '--inplace']
+
 
 @begin.start
 def wcit(*filenames):

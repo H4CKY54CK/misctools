@@ -4,18 +4,18 @@ import time
 import shutil
 import argparse
 import traceback
-from pathlib import Path
+# from pathlib import Path
 from . import __version__
 
 def unarchit(args=None):
 
-    source = Path(args.source).resolve()
+    source = os.path.abspath(args.source)
     output = str(source).split(''.join(source.suffixes))[0] if not args.output else args.output
     shutil.unpack_archive(source, output)
     if not args.quiet:
         print('Finished extracting.')
     if args.delete:
-        source.unlink()
+        os.remove(source)
 
 def umain(argv=None):
     argv = (argv or sys.argv)[1:]
@@ -31,7 +31,7 @@ def umain(argv=None):
 
 def archit(args, options=None):
     args.output = args.output or args.source
-    base_out = Path(args.output).name
+    base_out = os.path.basename(args.output)
     errors = False
     if not args.quiet:
         print(f"\n\033[38;2;30;144;255m    \033[4mMisctools v{__version__}\033[24m\033[38;2;123;104;238m\n")
@@ -58,8 +58,8 @@ def archit(args, options=None):
                 print(f"\n    \033[38;2;255;165;0mFinished installing `{base_out}.{ext}`...\033[0m\n")
             if not args.quiet:
                 print(f"    \033[38;2;255;165;0mCleaning up...\033[0m\n")
-            outpath = Path(f'{args.output}.{ext}')
-            outpath.unlink()
+            outpath = os.path.abspath(f'{args.output}.{ext}')
+            os.remove(outpath)
         if errors:
             if not args.quiet:
                 print("    \033[38;2;50;252;50mFinished with errors. See `archiving_errors.log` for a more detailed report.\033[0m")
