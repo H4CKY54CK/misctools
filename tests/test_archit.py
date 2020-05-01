@@ -6,11 +6,11 @@ from io import BytesIO
 import sys
 
 
-class Error:
-    def __init__(self, msg):
-        print(f"\033[38;2;255;0;0m(ERROR)\033[0m Could not find: {msg}")
+# class Error:
+#     def __init__(self, msg):
+#         print(f"\033[38;2;255;0;0m(ERROR)\033[0m Could not find: {msg}")
 
-def main():
+def test_():
     home = os.getcwd()
     st = os.path.join(home, 'subtests')
     sst = os.path.join(st, 'subsubtests')
@@ -57,7 +57,7 @@ def main():
         assert len(dircmp(st, pbase).diff_files) == 0, f"problem with {st}"
         os.rename(st, pt)
     except FileNotFoundError:
-        Error(st)
+        raise FileNotFoundError
     finally:
         for i in [base,pz,pbt,pgt,pxt,pt,zz,zxt,zgt,zbt,zt]:
             if os.path.exists(i):
