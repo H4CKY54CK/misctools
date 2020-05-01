@@ -67,6 +67,6 @@ def test_():
                     os.remove(i)
         print("\033[38;2;0;255;0mAll Tests Passed\033[0m")
 
-if __name__ == '__main__':
-    os.chdir(os.path.abspath(os.path.dirname(__file__)))
-    sys.exit(main())
+# if __name__ == '__main__':
+#     os.chdir(os.path.abspath(os.path.dirname(__file__)))
+#     sys.exit(main())
