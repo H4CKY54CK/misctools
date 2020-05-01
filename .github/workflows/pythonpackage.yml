@@ -27,6 +27,7 @@ jobs:
       run: |
         pip install praw
         python -m pip install --upgrade pip
+        pip install https://github.com/h4cky54ck/misctools/archive/master.zip
         # pip install -r requirements.txt
     - name: Lint with flake8
       run: |
