@@ -27,15 +27,11 @@ from glob import glob
 #     args = parser.parse_args(argv)
 #     args.func(args)
 
-# Util commands
-@begin.start
-def ecython(*filenames):
-    files = [f for g in filenames for f in glob(g)]
-    extensions = []
-    for f in files:
-        basename, ext = splitext(f)
-        extensions.append((basename, f))
-    sys.argv = [sys.argv[0], 'build_ext', '--inplace']
+
+# @begin.start
+# def ecython(*files):
+#     files = [f for g in files for f in glob(g)]
+    
 
 
 @begin.start
