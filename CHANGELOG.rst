@@ -1,6 +1,17 @@
 CHANGELOG
 ==========
 
+1.9.4 (5-2-2020)
+----------------
+
+**Changes since last changelog entry**
+
+* Removed code that was no longer in use. Cleaned up. Started writing tests. Fixed first and only test. Fixed formatting issue in `archit`.
+
+**To Do**
+
+* Merge `wgetit` into `utilities.py`.
+
 1.9.0 (4-21-2020)
 -----------------
 
