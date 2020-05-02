@@ -15,7 +15,6 @@ def unarchit(args=None):
         base, second = os.path.splitext(base)
         suffix = second + '.' + suffix.strip('.2')
 
-    print(suffix)
     output = str(source).split(suffix)[0] if not args.output else args.output
 
     shutil.unpack_archive(source, output)
