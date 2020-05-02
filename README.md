@@ -1,3 +1,5 @@
+![Python package](https://github.com/H4CKY54CK/misctools/workflows/Python%20package/badge.svg)
+
 # misctools
 
 Most Indefinitely Something Cool... tools.
