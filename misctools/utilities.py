@@ -23,3 +23,11 @@ def wcit(*filenames):
     if c != chars:
         sys.stdout.write(f"{lines:<10}{words:<10}{chars:<10}{'total':<10}\n")
 
+@begin.start
+def wgetit(url, name):
+    try:
+        with open(name, 'wb') as f:
+            f.write(urlopen(url).read())
+            return f"{url} -> {name}"
+    except Exception as e:
+        return str(e)
