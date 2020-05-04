@@ -2,6 +2,7 @@ import os
 import sys
 import begin
 from glob import glob
+from urllib.request import urlopen
 
 @begin.start
 def wcit(*filenames):
