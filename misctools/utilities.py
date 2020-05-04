@@ -10,7 +10,8 @@ def wcit(*filenames):
     chars = 0
     words = 0
     lines = 0
-    sys.stdout.write(f"\n{'lines':<10}{'words':<10}{'chars':<10}\n")
+    system_dependent_shorthand = '\n' if os.name == 'nt' else ''
+    sys.stdout.write(f"{system_dependent_shorthand}{'lines':<10}{'words':<10}{'chars':<10}\n")
     for file in files:
         with open(file) as f:
             d = f.read()
