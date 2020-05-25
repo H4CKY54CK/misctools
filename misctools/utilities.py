@@ -28,10 +28,11 @@ def wcit(*filenames):
     if len(output) > 2:
         output.append((lines, words, chars, 'total'))
     w = max([len(str(i)) for i in (chars,words,lines)])
+    ww = max([len(str(i)) for i in (files)])
     if w < 5:
         w = 5
     for item in output:
-        sprint('{:>{width}} {:>{width}} {:>{width}} {:>{width}}\n'.format(*item,width=w))
+        sprint('{:>{width}} {:>{width}} {:>{width}} {:>{wwidth}}\n'.format(*item,width=w,wwidth=ww))
 
 
 @begin.start
