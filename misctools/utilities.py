@@ -35,7 +35,9 @@ def wcit(*filenames):
 
 
 @begin.start
-def wgetit(url, name):
+def wgetit(url, name=None):
+    if name is None:
+        name = os.path.split(url)[1]
     try:
         with open(name, 'wb') as f:
             f.write(urlopen(url).read())
