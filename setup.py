@@ -17,7 +17,7 @@ setup(name=PACKAGE_NAME,
       author='Hackysack',
       author_email='tk13xr37@gmail.com',
       packages=find_packages(exclude=[]),
-      install_requires=['pillow'],
+      # install_requires=['pillow'],
       python_requires='>=3.6',
       entry_points={'console_scripts':
           ['spriteit = misctools.spriteit:main',
@@ -26,6 +26,7 @@ setup(name=PACKAGE_NAME,
           'unarchit = misctools.archit:umain',
           'gifit = misctools.gifit:main',
           'sliceit = misctools.sliceit:main',
-          'wcit = misctools.utilities:wcit.start',]
+          'wcit = misctools.utilities:wcit.start',
+          'si2 = misctools.spriteit2:main',]
           })
 
