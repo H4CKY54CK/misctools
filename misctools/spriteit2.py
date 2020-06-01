@@ -98,8 +98,6 @@ def start(args):
     sprite = Sprite(args)
     sprite.spriteit()
 
-
-
 def main(argv=None):
 
     argv = (argv or sys.argv)[1:]
