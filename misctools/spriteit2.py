@@ -64,6 +64,7 @@ class Sprite:
         sheet.save(os.path.join(output, 'flairs-{}.png'.format(os.path.split(source)[1])),'PNG')
     
     def generate_stylesheet(self, source, width, height, output, project=None):
+
         images = [file for file in os.scandir(source)]
         size = Image.open(images[0].path).size
         if width and height:
@@ -93,12 +94,14 @@ class Sprite:
             f.writelines(lines)
 
 def start(args):
+
     sprite = Sprite(args)
     sprite.spriteit()
 
 
 
 def main(argv=None):
+
     argv = (argv or sys.argv)[1:]
     parser = argparse.ArgumentParser()
     parser.add_argument('source')
