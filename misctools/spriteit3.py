@@ -2,7 +2,6 @@ import os
 import sys
 import csv
 import praw
-import shutil
 import argparse
 from math import sqrt, ceil, floor
 from PIL import Image
@@ -19,15 +18,12 @@ class Sprite:
             for item in os.scandir(path):
                 if item.is_dir():
                     self.source.append(item.path)
-                    self.dirs.append(item.path)
             self.source.pop(0)
         if not self.dirs:
             self.dirs = [args.source]
         self.width = args.width
         self.height = args.height
-        self.output = args.output or args.source
-        if os.path.exists(args.output):
-            shutil.rmtree(args.output)
+        self.output = args.output or 'sprites'
 
     def spriteit(self):
 
@@ -50,8 +46,6 @@ class Sprite:
         x = y = 0
         sheet = Image.new('RGBA', canvas)
         for item in images:
-            if item.is_dir():
-                continue
             sheet.paste(Image.open(item), (x,y))
             x += size[0]
             if x >= canvas[0]:
@@ -61,7 +55,8 @@ class Sprite:
             sheet = sheet.resize((width*rows, height*cols), Image.LANCZOS)
         if not os.path.exists(output):
             os.mkdir(output)
-        sheet.save(os.path.join(output, 'flairs-{}.png'.format(os.path.split(source)[1])),'PNG')
+        sheet.save(os.path.join(output, '{}.png'.format(output)),'PNG')
+        self.generate_stylesheet()
     
     def generate_stylesheet(self, source, width, height, output, project=None):
         images = [file for file in os.scandir(source)]
@@ -77,19 +72,17 @@ class Sprite:
         lines = []
         folder = ''
         if project:
-            folder = os.path.split(os.path.dirname(images[0].path))[1] + '-'
+            folder = os.path.dirname(images[0].path) + '-'
             line = f'\n.flair[class*="{folder[:-1]}-"] {{background-image: url(%%flairs-{folder[:-1]}%%);}}\n\n'
             lines.append(line)
         for item in images:
-            if item.is_dir():
-                continue
             line = f".flair-{folder}{item.name.replace('.png', '')} {{min-width: {size[0]}px; background-position: -{x}{'px' if x != 0 else ''} -{y}{'px' if y != 0 else ''};}}\n"
             x += size[0]
             if x >= size[0] * rows:
                 x = 0
                 y += size[1]
             lines.append(line)
-        with open(stylesheet, 'a') as f:
+        with open(stylesheet, 'w') as f:
             f.writelines(lines)
 
 def start(args):
