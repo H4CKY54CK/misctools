@@ -1,7 +1,5 @@
 import os
 import sys
-import csv
-import praw
 import shutil
 import argparse
 from math import sqrt, ceil, floor
