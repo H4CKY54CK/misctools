@@ -50,7 +50,7 @@ class Sprite:
         x = y = 0
         sheet = Image.new('RGBA', canvas)
         for item in images:
-            if item.is_dir():
+            if os.path.isdir(item):
                 continue
             sheet.paste(Image.open(item), (x,y))
             x += size[0]
@@ -81,7 +81,7 @@ class Sprite:
             line = f'\n.flair[class*="{folder[:-1]}-"] {{background-image: url(%%flairs-{folder[:-1]}%%);}}\n\n'
             lines.append(line)
         for item in images:
-            if item.is_dir():
+            if os.path.isdir(item):
                 continue
             line = f".flair-{folder}{item.name.replace('.png', '')} {{min-width: {size[0]}px; background-position: -{x}{'px' if x != 0 else ''} -{y}{'px' if y != 0 else ''};}}\n"
             x += size[0]
