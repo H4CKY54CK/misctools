@@ -1,213 +1,118 @@
 import os
 import sys
-import csv
-import praw
+import shutil
 import argparse
 from math import sqrt, ceil, floor
 from PIL import Image
+from threading import Thread
 
-def build_spritesheets(args=None):
-    """Generate spritesheets."""
+class Sprite:
 
-    for folder in os.scandir(args.source):
-        if os.path.isdir(folder.path):
-            images = []
-            x, y = 0, 0
-            for item in os.scandir(folder.path):
-                exts = ['.png', '.jpg', '.jpeg']
-                if item.name.endswith(tuple(exts)):
-                    images.append(Image.open(item.path))
-                    extension = os.path.splitext(item.path)[1]
-            if len(images) > ceil(sqrt(len(images))) * floor(sqrt(len(images))):
-                rows = ceil(sqrt(len(images))), ceil(sqrt(len(images)))
-            else:
-                rows = ceil(sqrt(len(images))), floor(sqrt(len(images)))
-            canvas = (images[0].size[0] * rows[0], images[0].size[1] * rows[1])
-            sprite = Image.new('RGBA', (canvas[0], canvas[1]))
-            for img in images:
-                sprite.paste(img, (x, y))
-                x += img.size[0]
-                if x >= canvas[0]:
-                    x -= canvas[0]
-                    y += img.size[1]
-            spritesheet = os.path.join(args.output, f"flairs-{folder.name}{extension}")
-            if args.size:
-                height, width = args.size
-                sprite.thumbnail((height * rows[0], width * rows[1]), Image.LANCZOS)
-            else:
-                height, width = images[0].size
-            sprite.save(spritesheet, extension.lstrip('.'))
-            print(f"Spritesheet `{os.path.basename(spritesheet)}` generated... You can find it in `{os.path.basename(args.output)}`.")
+    def __init__(self, args):
 
-def build_stylesheet(args=None):
-    """Generate stylesheet contents."""
+        self.source = [args.source]
+        self.dirs = []
+        while self.source:
+            path = self.source[0]
+            for item in os.scandir(path):
+                if item.is_dir():
+                    self.source.append(item.path)
+                    self.dirs.append(item.path)
+            self.source.pop(0)
+        if not self.dirs:
+            self.dirs = [args.source]
+        self.width = args.width
+        self.height = args.height
+        self.output = args.output
+        if os.path.exists(self.output):
+            shutil.rmtree(self.output)
+        os.mkdir(self.output)
 
-    m = '\n'
-    if args.minify:
-        m = ''
-    stylesheet = os.path.join(args.output, 'stylesheet.css')
-    with open(stylesheet, 'w') as cssf:
-        if args.size:
-            height, width = args.size
-        if args.site:
-            reddit = praw.Reddit(args.site)
-            subreddit = reddit.subreddit(reddit.config.custom['subreddit'])
-            key = reddit.config.custom['key']
-            sub_style = subreddit.stylesheet().stylesheet
-            style = f"{sub_style.split(key)[0]}{key}{m}-------------*/{m}"
-            cssf.write(style)
-        for folder in os.scandir(args.source):
-            path = os.path.join(args.source, folder.path)
-            if os.path.isdir(path):
-                line = f'{m}.flair[class*="{folder.name}-"] {{background-image: url(%%flairs-{folder.name}%%);}}{m}{m}'
-                cssf.write(line)
-                x, y = 0, 0
-                images = 0
-                for item in os.listdir(path):
-                    images += 1
-                if images > ceil(sqrt(images)) * floor(sqrt(images)):
-                    rows = ceil(sqrt(images)), ceil(sqrt(images))
-                else:
-                    rows = ceil(sqrt(images)), floor(sqrt(images))
-                for count, item in enumerate(os.scandir(path)):
-                    if count == 0 and not args.size:
-                        img = Image.open(item.path)
-                        height, width = img.size
-                    if item.name.endswith('_4.png'):
-                        item = item.name.split('_4.png')[0]
-                    elif item.name.endswith('.png'):
-                        item = item.name.split('.png')[0]
-                    part = f".flair-{folder.name}-{item} {{min-width: {width}px; background-position: {x}{'px' if x != 0 else ''} {y}{'px' if y != 0 else ''};}}{m}"
-                    cssf.write(part)
-                    x -= height
-                    if -x == height * rows[0]:
-                        x += height * rows[0]
-                        y -= width
+    def spriteit(self):
 
-    print(f"Stylesheet `{os.path.basename(stylesheet)}` generated. You can find it in `{os.path.basename(args.output)}`.")
+        p = None
+        if len(self.dirs) > 1:
+            p = True
+        for item in self.dirs:
+            Thread(target=self.single_sheet, args=(item, self.width, self.height, self.output)).start()
+            Thread(target=self.generate_stylesheet, args=(item, self.width, self.height, self.output), kwargs={'project': p}).start()
 
-def build_flairs(args=None):
-    """Generate dictionary for `flairs.csv.`"""
+    def single_sheet(self, source, width, height, output):
+        
+        images = [file.path for file in os.scandir(source)]
+        if len(images) > ceil(sqrt(len(images))) * floor(sqrt(len(images))):
+            rows, cols = ceil(sqrt(len(images))), ceil(sqrt(len(images)))
+        else:
+            rows, cols = ceil(sqrt(len(images))), floor(sqrt(len(images)))
+        size = Image.open(images[0]).size
+        canvas = (size[0]*rows,size[1]*cols)
+        x = y = 0
+        sheet = Image.new('RGBA', canvas)
+        for item in images:
+            if os.path.isdir(item):
+                continue
+            sheet.paste(Image.open(item), (x,y))
+            x += size[0]
+            if x >= canvas[0]:
+                x = 0
+                y += size[1]
+        if width and height:
+            sheet = sheet.resize((width*rows, height*cols), Image.LANCZOS)
+        # if not os.path.exists(output):
+            # os.mkdir(output)
+        filename = os.path.join(output, 'flairs-{}.png'.format(os.path.split(source)[1]))
+        sheet.save(filename,'PNG')
+        print("{} generated.".format(filename.replace('.png', '')))
+    
+    def generate_stylesheet(self, source, width, height, output, project=None):
 
-    flair_list = os.path.join(args.output, 'flairs.csv')
-    with open(flair_list, 'w', newline='') as csvf:
-        csvf = csv.writer(csvf)
-        for folder in os.scandir(args.source):
-            path = os.path.join(args.source, folder)
-            if os.path.isdir(path):
-                for item in os.listdir(path):
-                    line1 = item.split('.png')[0]
-                    line2 = f"{folder.name}-{line1}"
-                    if item.endswith('_4.png'):
-                        line2 = f"{folder.name}-{item.split('_4.png')[0]}"
-                    csvf.writerow([line1,line2])
+        images = [file for file in os.scandir(source)]
+        size = Image.open(images[0].path).size
+        if width and height:
+            size = (width,height)
+        x = y = 0
+        if len(images) > ceil(sqrt(len(images))) * floor(sqrt(len(images))):
+            rows, cols = ceil(sqrt(len(images))), ceil(sqrt(len(images)))
+        else:
+            rows, cols = ceil(sqrt(len(images))), floor(sqrt(len(images)))
+        stylesheet = os.path.join(output,'stylesheet.css')
+        lines = []
+        folder = ''
+        if project:
+            folder = os.path.split(os.path.dirname(images[0].path))[1] + '-'
+            line = f'\n.flair[class*="{folder[:-1]}-"] {{background-image: url(%%flairs-{folder[:-1]}%%);}}\n\n'
+            lines.append(line)
+        for item in images:
+            if os.path.isdir(item):
+                continue
+            line = f".flair-{folder}{item.name.replace('.png', '').replace('_4', '')} {{min-width: {size[0]}px; background-position: {'-' if x != 0 else ''}{x}{'px' if x != 0 else ''} {'-' if y != 0 else ''}{y}{'px' if y != 0 else ''};}}\n"
+            x += size[0]
+            if x >= size[0] * rows:
+                x = 0
+                y += size[1]
+            lines.append(line)
+        with open(stylesheet, 'a') as f:
+            f.writelines(lines)
 
-    print(f"Flair list `{os.path.basename(flair_list)}` generated. You can find it in `{os.path.basename(args.output)}`.")
+def start(args):
 
-def update_reddit(args=None):
-
-    stylesheet = os.path.join(args.output, 'stylesheet.css')
-    if args.site and args.update:
-        reddit = praw.Reddit(args.site)
-        subreddit = reddit.subreddit(reddit.config.custom['subreddit'])
-
-        for item in os.listdir(args.output):
-            path = os.path.join(os.path.abspath(args.output), item)
-            ext = ['.png', '.jpg', '.jpeg']
-            if item.lower().endswith(tuple(ext)):
-                subreddit.stylesheet.upload(item.split('.')[0], path)
-                print(f"Image `{item}` uploaded successfully as {item.split('.')[0]}")
-            if item.lower().endswith('.css'):
-                with open(stylesheet) as cssf:
-                    style = cssf.read()
-                    subreddit.stylesheet.update(style)
-                    print(f"Stylesheet `{os.path.basename(stylesheet)}` updated succesfully.")
-
-def process(args=None):
-    if args.img_output:
-        build_spritesheets(args)
-    if args.css_output:
-        build_stylesheet(args)
-    if args.bot_files:
-        build_flairs(args)
-    if args.site and args.update:
-        update_reddit(args)
-
+    sprite = Sprite(args)
+    sprite.spriteit()
 
 def main(argv=None):
+
     argv = (argv or sys.argv)[1:]
     parser = argparse.ArgumentParser()
-    parser.add_argument('-s', '--source',
-                        dest='source', type=str, nargs=1,
-                        default=os.environ.get("SPRITEIT_SOURCE", None),
-                        help='source directory of images')
-    parser.add_argument('-o', '--output',
-                        dest='output', type=str, nargs=1,
-                        default=os.environ.get("SPRITEIT_OUTPUT", None),
-                        help='output directory of spritesheets/stylesheet')
-    parser.add_argument('-xy', '--size',
-                        dest='size', type=int, nargs=2,
-                        default=os.environ.get("SPRITEIT_IMG_SIZE"),
-                        help='desired dimensions of individual images (separated by a space), \
-                        resized before adding to spritesheet, and does not leave behind copies of \
-                        files (example: `spriteit mypics -xy 50 50` to resize images to 50x50px, \
-                        and then adding to the spritesheet)')
-    parser.add_argument('-b', '--bot-files',
-                        dest='bot_files', action='store_true', help='if you also the user flair \
-                        bot, this option will generate a key:value csv file. for more info, see \
-                        the README')
-    parser.add_argument('-nc', '--no-css',
-                        dest='css_output', action='store_false', help='skip generating the CSS, \
-                        only generate the images')
-    parser.add_argument('-ni', '--no-img',
-                        dest='img_output', action='store_false', help='skip generating the images, \
-                        only generate the CSS')
-    parser.add_argument('-m', '--minify',
-                        dest='minify', action='store_true',
-                        help='minify the stylesheet after generation')
-    parser.add_argument('-u', '--update',
-                        dest='update', action='store_true', help='automatically update subreddit \
-                        user flairs. includes uploading spritesheets and updating stylesheet. \
-                        (requires -S/--site to also be used, as a precaution)')
-    parser.add_argument('-S', '--site',
-                        dest='site', type=str,
-                        default=os.environ.get("SPRITEIT_SITE", None),
-                        help='provide a config site from a pre-existing `praw.ini` \
-                        file. must be in current working directory or APPDATA')
-    parser.set_defaults(func=process)
-
-    options, args = parser.parse_known_args(argv)
-
-    extra = 0
-    if not options.source and args:
-        options.source = args[0]
-        extra += 1
-
-    if not options.output and args[extra:]:
-        options.output = args[extra]
-        extra += 1
-
-    if options.source and options.output and args[extra:]:
-        parser.error((f"Unrecognized arguments {args[extra:]}"))
-
-    if options.source is None:
-        parser.error("You must provide a source directory.")
-
-    if not os.path.isdir(options.source):
-        parser.error("Source directory not found.")
-
-    options.source = os.path.abspath(options.source)
-
-    if options.output is None:
-        options.output = 'sprites'
-
-    if options.output:
-        options.output = os.path.abspath(options.output)
-
-    if not os.path.exists(options.output):
-        os.mkdir(options.output)
-
-    options.func(options)
+    parser.add_argument('source')
+    parser.add_argument('output', nargs='?')
+    parser.add_argument('-x', '--width', dest='width', type=int, const=None)
+    parser.add_argument('-y', '--height', dest='height', type=int, const=None)
+    # parser.add_argument('output')
+    parser.set_defaults(func=start)
+    args,options = parser.parse_known_args(argv)
+    if args.output is None:
+        args.output = 'sprites'
+    args.func(args)
 
 if __name__ == '__main__':
     sys.exit(main())

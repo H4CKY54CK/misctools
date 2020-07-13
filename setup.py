@@ -27,6 +27,8 @@ setup(name=PACKAGE_NAME,
           'gifit = misctools.gifit:main',
           'sliceit = misctools.sliceit:main',
           'wcit = misctools.utilities:wcit.start',
-          'si2 = misctools.spriteit2:main',]
+          'si2 = misctools.spriteit2:main',
+          'zipit = misctools.zipit:main',
+          'unzipit = misctools.zipit:umain',]
           })
 
