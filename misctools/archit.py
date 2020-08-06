@@ -49,7 +49,7 @@ def archit(args, options=None):
 
                 if not args.quiet:
                     print(f"    Creating archive {base_out}.{ext}...")
-                shutil.make_archive(args.source, item)
+                shutil.make_archive(args.output, item, args.source)
                 if not args.quiet:
                     print(f"    Archive `{base_out}.{ext}` created...\n")
             except Exception as e:
