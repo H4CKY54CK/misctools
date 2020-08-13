@@ -33,9 +33,15 @@ class Sprite:
         p = None
         if len(self.dirs) > 1:
             p = True
+        threads = []
         for item in self.dirs:
-            Thread(target=self.single_sheet, args=(item, self.width, self.height, self.output)).start()
-            Thread(target=self.generate_stylesheet, args=(item, self.width, self.height, self.output), kwargs={'project': p}).start()
+            t1 = Thread(target=self.single_sheet, args=(item, self.width, self.height, self.output))
+            t2 = Thread(target=self.generate_stylesheet, args=(item, self.width, self.height, self.output), kwargs={'project': p})
+            threads.extend((t1,t2))
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join()
 
     def single_sheet(self, source, width, height, output):
         

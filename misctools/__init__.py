@@ -1,3 +1,3 @@
-__version__ = "2.0.0alpha"
+__version__ = "2.0.1"
 
 from .timer import *

@@ -153,7 +153,7 @@ def main(argv=None):
                         files (example: `spriteit mypics -xy 50 50` to resize images to 50x50px, \
                         and then adding to the spritesheet)')
     parser.add_argument('-b', '--bot-files',
-                        dest='bot_files', action='store_true', help='if you also the user flair \
+                        dest='bot_files', action='store_true', help='if you use the user flair \
                         bot, this option will generate a key:value csv file. for more info, see \
                         the README')
     parser.add_argument('-nc', '--no-css',
