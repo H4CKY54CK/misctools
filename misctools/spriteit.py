@@ -109,13 +109,17 @@ def main(argv=None):
 
     argv = (argv or sys.argv)[1:]
     parser = argparse.ArgumentParser()
-    parser.add_argument('source')
+    parser.add_argument('source', nargs='?')
     parser.add_argument('output', nargs='?')
     parser.add_argument('-x', '--width', dest='width', type=int, const=None)
     parser.add_argument('-y', '--height', dest='height', type=int, const=None)
+    parser.add_argument('-V', '--version', action='store_true')
     # parser.add_argument('output')
     parser.set_defaults(func=start)
     args,options = parser.parse_known_args(argv)
+    if args.version:
+        print("v2.0.1")
+        sys.exit()
     if args.output is None:
         args.output = 'sprites'
     args.func(args)
