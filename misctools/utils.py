@@ -5,7 +5,9 @@ import argparse
 
 def search(args):
 
-    if args.source:
+    if args.root:
+        source = '/'
+    elif args.source:
         found = False
         for root, dirnames, filenames in os.walk(os.path.expanduser('~')):
             for dirname in dirnames:
@@ -29,6 +31,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser()
     parser.add_argument('files', type=str, nargs='+')
     parser.add_argument('-s', '--source', dest='source', type=str, nargs='?')
+    parser.add_argument('--root', action='store_true')
     parser.set_defaults(func=search)
     args = parser.parse_args(argv)
     args.func(args)
