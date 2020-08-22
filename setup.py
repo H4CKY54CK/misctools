@@ -21,6 +21,7 @@ setup(name=PACKAGE_NAME,
       python_requires='>=3.6',
       entry_points={'console_scripts':
           ['spriteit = misctools.spriteit:main',
+          'search = misctools.utils:main',
           'archit = misctools.archit:main',
           'wgetit = misctools.utilities:wgetit.start',
           'unarchit = misctools.archit:umain',
