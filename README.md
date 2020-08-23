@@ -32,7 +32,9 @@ You also get a timing decorator, to time your functions, with the option to repe
 
 The timing decorator can be used in several ways, illustrated below.
 
-    from misctools.timer import timeit
+    # from misctools.timer import timeit
+    # I forgot I changed this
+    from misctools import timeit
     import time
 
     # Time how long a function takes.
