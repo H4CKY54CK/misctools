@@ -25,7 +25,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        pip install praw
+        pip install praw begins
         python -m pip install --upgrade pip
         pip install https://github.com/h4cky54ck/misctools/archive/master.zip
         # pip install -r requirements.txt
